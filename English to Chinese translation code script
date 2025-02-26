@@ -1,0 +1,36 @@
+import pypinyin
+from pypinyin import pinyin, Style
+from googletrans import Translator
+
+def transliterate_to_pinyin(domain):
+    # Split the domain into parts (e.g., 'example' and 'com')
+    parts = domain.split('.')
+    domain_name = parts[0]
+    extension = parts[1] if len(parts) > 1 else ''
+
+    # Convert the domain name to Pinyin
+    pinyin_name = ''.join([item[0] for item in pinyin(domain_name, style=Style.NORMAL)])
+    
+    # Combine the Pinyin name with the extension
+    pinyin_domain = f"{pinyin_name}.{extension}" if extension else pinyin_name
+    return pinyin_domain
+
+def translate_to_chinese_simplified(text):
+    translator = Translator()
+    translation = translator.translate(text, src='en', dest='zh-cn')
+    return translation.text
+
+def convert_domain_to_chinese(domain):
+    # Step 1: Transliterate to Pinyin
+    pinyin_domain = transliterate_to_pinyin(domain)
+    
+    # Step 2: Translate to Chinese Simplified
+    chinese_domain = translate_to_chinese_simplified(pinyin_domain)
+    
+    return chinese_domain
+
+# Example usage
+english_domain = "example.com"
+chinese_domain = convert_domain_to_chinese(english_domain)
+print(f"English Domain: {english_domain}")
+print(f"Chinese Simplified Domain: {chinese_domain}")
